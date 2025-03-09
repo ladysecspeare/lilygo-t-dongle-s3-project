@@ -98,7 +98,7 @@ void FuncGetCreds() {
   server.send(200, "text/html", response);
 }
 
-void FuncNotFound() {
+void onNotFound() {
   Serial.println("Client requested: " + server.uri());
   server.send(404, "text/plain", "404: Not Found");
 }
@@ -114,7 +114,7 @@ void setup() {
   server.on("/", FuncHandleRoot);
   server.on("/getCreds", HTTP_POST, FuncPostCreds); // Store credentials
   server.on("/getCreds", HTTP_GET, FuncGetCreds);   // Display credentials
-  server.onFuncNotFound(FuncCaptivePortal);
+  server.onNotFound(FuncCaptivePortal);
 
   server.begin();
   Serial.println("HTTP server started");
